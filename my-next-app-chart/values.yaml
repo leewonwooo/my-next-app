@@ -1,0 +1,30 @@
+# 1. 이미지 설정
+image:
+  repository: [Jacob님의DockerHub아이디]/my-next-app # 아까 push한 이미지 주소
+  pullPolicy: IfNotPresent
+  tag: "latest" # 혹은 특정 버전
+
+# 2. 서비스 설정 (Next.js는 기본 3000포트를 사용합니다)
+service:
+  type: ClusterIP
+  port: 80         # 외부에서 접근할 포트
+  targetPort: 3000 # 컨테이너 내부 포트 (Next.js 기본값)
+
+# 3. 리소스 제한 (홈랩 사양에 맞춰 조절 가능)
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# 4. Ingress 설정
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: my-app.jacob.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
